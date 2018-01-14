@@ -5,5 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="buttonColor">#766DEB</color>
     <color name="actionStatusBarColor">#540CC4</color>
-
+    <color name="backgroundColor">#d8d8d8</color>
+    <color name="connectedBackgroundColor">#e9fcd6</color>
+    <color name="connectedTextColor">#67cc02</color>
 </resources>

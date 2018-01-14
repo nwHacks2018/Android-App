@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/backgroundColor"
     tools:context="com.nwhacks.connieho.sampleapplication.activity.MainActivity">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,22 +20,26 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textSize="30sp" />
+            android:padding="20dp"
+            android:gravity="center"
+            android:fontFeatureSettings="smcp"
+            android:textColor="@color/connectedTextColor"
+            android:background="@drawable/rounded_corner"
+            android:textSize="20sp" />
 
         <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:backgroundTint="@color/buttonColor"
-            android:text="Manually connect to a network"
             android:id="@+id/launcher1Btn"
-            />
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Manually connect to a network"
+            tools:backgroundTint="@android:color/white" />
 
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:backgroundTint="@color/buttonColor"
+            tools:backgroundTint="@android:color/white"
             android:text="Scan local public networks"
             android:id="@+id/launcher2Btn"
             />
@@ -42,7 +47,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:backgroundTint="@color/buttonColor"
+            tools:backgroundTint="@android:color/white"
             android:text="Retrieve from server"
             android:id="@+id/launcher3Btn"
             />
@@ -52,7 +57,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:backgroundTint="@color/buttonColor"
+            tools:backgroundTint="@android:color/white"
             android:text="See saved networks" />
 
 
