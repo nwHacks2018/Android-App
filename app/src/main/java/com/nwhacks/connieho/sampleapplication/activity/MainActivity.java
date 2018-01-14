@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.nwhacks.connieho.sampleapplication.R;
+import com.nwhacks.connieho.sampleapplication.service.AutoRetriever;
 import com.nwhacks.connieho.sampleapplication.service.Autoconnector;
 import com.nwhacks.connieho.sampleapplication.service.GPSLocator;
 
@@ -34,6 +35,8 @@ public class MainActivity extends Activity {
 
 //        Intent autoconnectorIntent = new Intent(this, Autoconnector.class);
 //        startService(autoconnectorIntent);
+//        Intent autoRetrieverIntent = new Intent(this, AutoRetriever.class);
+//        startService(autoRetrieverIntent);
 
         Button launcher1Btn = findViewById(R.id.launcher1Btn);
         launcher1Btn.setOnClickListener(new View.OnClickListener() {
