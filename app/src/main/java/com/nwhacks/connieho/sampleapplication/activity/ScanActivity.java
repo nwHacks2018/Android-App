@@ -131,11 +131,6 @@ public class ScanActivity extends ListActivity {
             }
         });
 
-        ((WiFindApplication) getApplication())
-                .getGlobalServices()
-                .getNetworkRepository()
-                .addPublicNetworks(getNetworks());
-
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -334,38 +329,6 @@ public class ScanActivity extends ListActivity {
             }
         });
         dialog.show();
-    }
-
-    public List<WifiNetwork> getNetworks(){
-        List<WifiNetwork> networkList = new ArrayList<>();
-        String urlString = "https://wifinder-294dd.firebaseio.com/Networks.json";
-        AsyncTask<String, Void, String> getRequest = new GetClient().execute(urlString);
-        try {
-            String result = getRequest.get();
-            try {
-                JSONObject object = new JSONObject(result);
-                Iterator<String> iterator = object.keys();
-                while (iterator.hasNext()) {
-                    JSONObject obj = object.getJSONObject(iterator.next());
-                    Coordinate coordinate = new Coordinate();
-                    coordinate.setLatitude(Double.parseDouble(obj.getJSONObject("Coordinate").getString("Latitude")));
-                    coordinate.setLongitude(Double.parseDouble(obj.getJSONObject("Coordinate").getString("Longitude")));
-                    WifiNetwork network = new WifiNetwork(
-                            obj.getString("SSID"),
-                            obj.getString("Password"),
-                            coordinate);
-                    Log.d("Network: ", network.getSsid());
-                    networkList.add(network);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return networkList;
     }
 
     private void initializeGPSLocator() {
