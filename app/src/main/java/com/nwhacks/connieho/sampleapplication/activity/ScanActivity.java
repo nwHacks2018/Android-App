@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
@@ -224,6 +225,13 @@ public class ScanActivity extends ListActivity {
         Iterator it = set.iterator();
         ArrayList<String> reFiltered = new ArrayList<String>();
         List<WifiNetwork> networkList = new ArrayList<WifiNetwork>();
+
+        if (((WiFindApplication) getApplication()).getGlobalVars().getCoordinate() == null){
+            Coordinate coordinate =  new Coordinate();
+            coordinate.setLongitude(49.0);
+            coordinate.setLongitude(-123.0);
+            ((WiFindApplication) getApplication()).getGlobalVars().setCoordinate(coordinate);
+        }
 
         while (it.hasNext()) {
             String ssid = it.next().toString();
