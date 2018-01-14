@@ -65,13 +65,13 @@ public class ScanActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_scan);
 
         list = getListView();
         mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         wifiReciever = new WifiScanReceiver();
 
-        initializeGPSLocator();
+        //initializeGPSLocator();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -257,8 +257,10 @@ public class ScanActivity extends ListActivity {
                     urlString,
                     wifiNetwork.getSsid(),
                     wifiNetwork.getPassword(),
-                    wifiNetwork.getLocation().getLatitude().toString(),
-                    wifiNetwork.getLocation().getLongitude().toString());
+                    null, null
+//                    wifiNetwork.getLocation().getLatitude().toString(),
+//                    wifiNetwork.getLocation().getLongitude().toString()
+);
         }
     }
 
