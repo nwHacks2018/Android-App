@@ -4,12 +4,14 @@ package com.nwhacks.connieho.sampleapplication.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
@@ -19,6 +21,8 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -60,6 +64,7 @@ public class ScanActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         list = getListView();
@@ -118,7 +123,7 @@ public class ScanActivity extends ListActivity {
 
         // listening to single list item on click
 
-        Button getSSIDBTN = (Button) findViewById(R.id.getSSIDs);
+       Button getSSIDBTN = (Button) findViewById(R.id.getSSIDs);
         getSSIDBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,6 +141,12 @@ public class ScanActivity extends ListActivity {
 
             }
         });
+    }
+
+    public void showAuthenticationDialog(View view){
+        android.app.FragmentManager fragmentManager = getFragmentManager();
+        AuthenticationFragment dialog = new AuthenticationFragment();
+        dialog.show(fragmentManager, "Authentication dialog");
     }
 
     protected void onPause() {
