@@ -1,14 +1,10 @@
 package com.nwhacks.connieho.sampleapplication.activity;
 
 import android.Manifest;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,17 +13,13 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.nwhacks.connieho.sampleapplication.R;
-import com.nwhacks.connieho.sampleapplication.service.AutoRetriever;
-import com.nwhacks.connieho.sampleapplication.service.Autoconnector;
 import com.nwhacks.connieho.sampleapplication.service.GPSLocator;
 
 public class MainActivity extends Activity {
