@@ -4,26 +4,21 @@ package com.nwhacks.connieho.sampleapplication.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.location.Location;
+import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -33,31 +28,21 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.nwhacks.connieho.sampleapplication.R;
 import com.nwhacks.connieho.sampleapplication.application.WiFindApplication;
-import com.nwhacks.connieho.sampleapplication.backend.GetClient;
 import com.nwhacks.connieho.sampleapplication.backend.PostClient;
 import com.nwhacks.connieho.sampleapplication.backend.WifiNetworkList;
 import com.nwhacks.connieho.sampleapplication.datatype.Coordinate;
 import com.nwhacks.connieho.sampleapplication.datatype.WifiNetwork;
-import com.nwhacks.connieho.sampleapplication.service.GPSLocator;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 public class ScanActivity extends ListActivity {
     WifiManager mainWifiObj;
@@ -82,14 +67,12 @@ public class ScanActivity extends ListActivity {
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                Log.v("FUCK", "Didnt have permission, asking user for it.");
 
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
 
             } else {
-                Log.v("FUCK", "Didnt have permission, NOT asking user for it.");
                 // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(this,
@@ -101,7 +84,6 @@ public class ScanActivity extends ListActivity {
                 // result of the request.
             }
         } else {
-            Log.v("FUCK", "Already had permission");
             mainWifiObj.startScan();
         }
 
@@ -163,12 +145,10 @@ public class ScanActivity extends ListActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.v("FUCK", "Granted");
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
 
                 } else {
-                    Log.v("FUCK", "Not Granted");
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
@@ -180,44 +160,26 @@ public class ScanActivity extends ListActivity {
         }
     }
 
-/*    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
-        if (requestCode == 1234
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Do something with granted permission
-            //mWifiListener.getScanningResults();
-            Log.v("FUCK", "FUCK THIS SHIT");
-        }
-    }*/
-
     class WifiScanReceiver extends BroadcastReceiver {
         @SuppressLint("UseValueOf")
         public void onReceive(Context c, Intent intent) {
             getSSIDs(c);
-    }
-
-
+        }
 
     public void getSSIDs(Context c){
 //        Toast.makeText(ScanActivity.this, "got wifi scanner receiver ", Toast.LENGTH_SHORT).show();
         List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
-        Log.v("FUCK", "size: " + wifiScanList.size());
 
         wifis = new String[wifiScanList.size()];
         for (int i = 0; i < wifiScanList.size(); i++) {
-            Log.v("FUCK", "ssid: " + wifiScanList.get(i).SSID);
             wifis[i] = ((wifiScanList.get(i)).toString());
         }
         String filtered[] = new String[wifiScanList.size()];
         int counter = 0;
         for (String eachWifi : wifis) {
             String[] temp = eachWifi.split(",");
-
             filtered[counter] = temp[0].substring(5).trim();//+"\n" + temp[2].substring(12).trim()+"\n" +temp[3].substring(6).trim();//0->SSID, 2->Key Management 3-> Strength
-
             counter++;
-
         }
 
         Set<String> set = new HashSet<String>();
@@ -248,7 +210,30 @@ public class ScanActivity extends ListActivity {
         }
 
         final TextView currentSSIDTextView = (TextView) findViewById(R.id.currentSSID);
-        currentSSIDTextView.setText("Current SSID: "+getCurrentSsid(c));
+        String currentSSID = getCurrentSsid(c);
+
+        // Drawable drawable = this.getResources().getDrawable(R.drawable.rounded_corner);
+
+
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setShape(GradientDrawable.RECTANGLE);
+        drawable.setCornerRadius(15);
+
+        if (currentSSID == null){
+            drawable.setStroke(3, getResources().getColor(R.color.disconnectedTextColor));
+            drawable.setColor(getResources().getColor(R.color.disconnectedBackgroundColor));
+            currentSSIDTextView.setTextColor(getResources().getColor(R.color.disconnectedTextColor));
+            currentSSIDTextView.setText("Not currently connected to a network");
+
+        } else {
+            drawable.setStroke(3, getResources().getColor(R.color.connectedTextColor));
+            drawable.setColor(getResources().getColor(R.color.connectedBackgroundColor));
+            currentSSIDTextView.setTextColor(getResources().getColor(R.color.connectedTextColor));
+
+            currentSSIDTextView.setText("Currently connected to: " + currentSSID);
+        }
+        currentSSIDTextView.setBackgroundDrawable(drawable);
+
 
         list.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.active_list_item, R.id.label, reFiltered));
     }
@@ -319,7 +304,11 @@ public class ScanActivity extends ListActivity {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.connect);
         dialog.setTitle("Connect to Network");
+
         TextView textSSID = (TextView) dialog.findViewById(R.id.textSSID1);
+        textSSID.setText(wifiSSID);
+
+
 
         Button dialogButton = (Button) dialog.findViewById(R.id.okButton);
         pass = (EditText) dialog.findViewById(R.id.textPassword);
@@ -327,6 +316,7 @@ public class ScanActivity extends ListActivity {
         String password = getPassword(wifiSSID);
         pass.setText(password);
         textSSID.setText(wifiSSID);
+
 
         // if button is clicked, connect to the network;
         dialogButton.setOnClickListener(new View.OnClickListener() {
