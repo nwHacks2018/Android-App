@@ -19,7 +19,7 @@ public class PostClient extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         try {
-            String urlString = params[0];
+            String urlString = params[0] + "/" + params[1] + ".json";
             String ssid = params[1];
             String password = params[2];
             String geoLat = params[3];
@@ -29,7 +29,7 @@ public class PostClient extends AsyncTask<String, Void, String> {
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             conn.setReadTimeout(10000);
             conn.setConnectTimeout(15000);
-            conn.setRequestMethod("POST");
+            conn.setRequestMethod("PATCH");
             conn.setDoInput(true);
             conn.setDoOutput(true);
 

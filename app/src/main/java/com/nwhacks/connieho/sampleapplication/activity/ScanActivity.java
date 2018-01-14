@@ -16,7 +16,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -32,14 +32,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nwhacks.connieho.sampleapplication.R;
+import com.nwhacks.connieho.sampleapplication.backend.GetClient;
+import com.nwhacks.connieho.sampleapplication.backend.PostClient;
+import com.nwhacks.connieho.sampleapplication.backend.WifiNetworkList;
+import com.nwhacks.connieho.sampleapplication.datatype.Coordinate;
+import com.nwhacks.connieho.sampleapplication.datatype.WifiNetwork;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends ListActivity {
+public class ScanActivity extends ListActivity {
     WifiManager mainWifiObj;
     WifiScanReceiver wifiReciever;
     ListView list;
@@ -55,6 +65,8 @@ public class MainActivity extends ListActivity {
         list = getListView();
         mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         wifiReciever = new WifiScanReceiver();
+
+        getNetworks();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -120,7 +132,7 @@ public class MainActivity extends ListActivity {
                 // selected item
                 String ssid = ((TextView) view).getText().toString();
                 connectToWifi(ssid);
-                Toast.makeText(MainActivity.this, "Wifi SSID : " + ssid, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ScanActivity.this, "Wifi SSID : " + ssid, Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -181,7 +193,7 @@ public class MainActivity extends ListActivity {
 
 
     public void getSSIDs(Context c){
-        Toast.makeText(MainActivity.this, "got wifi scanner receiver ", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ScanActivity.this, "got wifi scanner receiver ", Toast.LENGTH_SHORT).show();
         List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
         Log.v("FUCK", "size: " + wifiScanList.size());
 
@@ -207,16 +219,43 @@ public class MainActivity extends ListActivity {
         }
         Iterator it = set.iterator();
         ArrayList<String> reFiltered = new ArrayList<String>();
+        List<WifiNetwork> networkList = new ArrayList<WifiNetwork>();
+
         while (it.hasNext()) {
             String ssid = it.next().toString();
             if (!ssid.isEmpty()) {
                 reFiltered.add(ssid);
+                Coordinate coordinate = new Coordinate();
+                coordinate.setLatitude(50.0);
+                coordinate.setLongitude(120.0);
+                WifiNetwork network = new WifiNetwork(
+                        ssid,
+                        "",
+                        coordinate);
+                networkList.add(network);
             }
         }
+
         final TextView currentSSIDTextView = (TextView) findViewById(R.id.currentSSID);
         currentSSIDTextView.setText("Current SSID: "+getCurrentSsid(c));
         list.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, R.id.label, reFiltered));
+
+        WifiNetworkList wifiNetworkList = new WifiNetworkList(networkList);
+        addNetworks(wifiNetworkList);
+        Toast.makeText(ScanActivity.this, "Uploaded SSIDs to Database", Toast.LENGTH_SHORT).show();
     }
+    }
+
+    public void addNetworks(WifiNetworkList wifiNetworks) {
+        for (WifiNetwork wifiNetwork : wifiNetworks.getNetworks()) {
+            String urlString = "https://wifinder-294dd.firebaseio.com/Networks";
+            new PostClient().execute(
+                    urlString,
+                    wifiNetwork.getSsid(),
+                    wifiNetwork.getPassword(),
+                    wifiNetwork.getLocation().getLatitude().toString(),
+                    wifiNetwork.getLocation().getLongitude().toString());
+        }
     }
 
     public static String getCurrentSsid(Context context) {
@@ -271,4 +310,40 @@ public class MainActivity extends ListActivity {
         });
         dialog.show();
     }
+
+    public WifiNetworkList getNetworks(){
+        WifiNetworkList networks = new WifiNetworkList();
+        List<WifiNetwork> networkList = new ArrayList<WifiNetwork>();
+        String urlString = "https://wifinder-294dd.firebaseio.com/Networks.json";
+        AsyncTask<String, Void, String> getRequest = new GetClient().execute(urlString);
+        try {
+            String result = getRequest.get();
+            try {
+                JSONObject object = new JSONObject(result);
+                Iterator<String> iterator = object.keys();
+                while (iterator.hasNext()) {
+                    JSONObject obj = object.getJSONObject(iterator.next());
+                    Coordinate coordinate = new Coordinate();
+                    coordinate.setLatitude(Double.parseDouble(obj.getJSONObject("Coordinate").getString("Latitude")));
+                    coordinate.setLongitude(Double.parseDouble(obj.getJSONObject("Coordinate").getString("Longitude")));
+                    WifiNetwork network = new WifiNetwork(
+                            obj.getString("SSID"),
+                            obj.getString("Password"),
+                            coordinate);
+                    Log.d("Network", network.getSsid());
+                    networkList.add(network);
+                }
+                networks.setNetworks(networkList);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return networks;
+    }
+
+
 }
