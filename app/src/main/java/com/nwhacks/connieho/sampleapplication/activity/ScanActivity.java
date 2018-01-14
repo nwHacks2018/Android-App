@@ -63,9 +63,6 @@ public class ScanActivity extends ListActivity {
 
     EditText pass;
 
-    private static final String TAG = "MAP_ACTIVITY";
-    public GPSLocator gpsLocator;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,9 +71,6 @@ public class ScanActivity extends ListActivity {
         list = getListView();
         mainWifiObj = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE));
         wifiReciever = new WifiScanReceiver();
-
-        initializeGPSLocator();
-
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -333,25 +327,5 @@ public class ScanActivity extends ListActivity {
             }
         });
         dialog.show();
-    }
-
-    private void initializeGPSLocator() {
-        Log.d(TAG, "Creating GPS locator");
-        gpsLocator = new GPSLocator();
-        checkLocationPermissions();
-        Intent serviceIntent = new Intent(this, GPSLocator.class);
-        startService(serviceIntent);
-    }
-
-    private void checkLocationPermissions() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                        PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] {
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION },
-                    10);
-        }
     }
 }
