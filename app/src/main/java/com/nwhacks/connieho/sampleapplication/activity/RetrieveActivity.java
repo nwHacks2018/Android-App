@@ -21,8 +21,6 @@ public class RetrieveActivity extends ListActivity {
 
     String wifis[];
 
-    private Boolean running = false;
-
     private static final String TAG = RetrieveActivity.class.getSimpleName();
 
     @Override
@@ -31,13 +29,6 @@ public class RetrieveActivity extends ListActivity {
         setContentView(R.layout.activity_retrieve);
 
         listView = getListView();
-
-        if(running) {
-            return;
-        }
-        else {
-            running = true;
-        }
 
         new Thread(new Runnable() {
             public void run() {
@@ -72,7 +63,6 @@ public class RetrieveActivity extends ListActivity {
                     }
                 });
 
-                running = false;
             }
         }).start();
     }
