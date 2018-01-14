@@ -1,11 +1,15 @@
 package com.nwhacks.connieho.sampleapplication.service;
 
+import android.util.Log;
+
 import com.nwhacks.connieho.sampleapplication.datatype.WifiNetwork;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NetworkRepository {
+
+    private static String TAG = NetworkRepository.class.getSimpleName();
 
     private List<WifiNetwork> savedLocalPrivateNetworks;
 
@@ -44,6 +48,7 @@ public class NetworkRepository {
     private void combineWifiNetworkLists(List<WifiNetwork> list1, List<WifiNetwork> list2) {
 
         for(WifiNetwork i : list2) {
+            Log.d(TAG, "Updating network " + i.getSsid());
             for(WifiNetwork j : list1) {
                 if(i.getSsid().equals(j.getSsid())) {
                     list1.remove(j);

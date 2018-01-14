@@ -68,10 +68,10 @@ public class ScanActivity extends ListActivity {
         setContentView(R.layout.activity_scan);
 
         list = getListView();
-        mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        mainWifiObj = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE));
         wifiReciever = new WifiScanReceiver();
 
-        //initializeGPSLocator();
+        initializeGPSLocator();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -131,7 +131,10 @@ public class ScanActivity extends ListActivity {
             }
         });
 
-        getNetworks();
+        ((WiFindApplication) getApplication())
+                .getGlobalServices()
+                .getNetworkRepository()
+                .addPublicNetworks(getNetworks());
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -257,9 +260,8 @@ public class ScanActivity extends ListActivity {
                     urlString,
                     wifiNetwork.getSsid(),
                     wifiNetwork.getPassword(),
-                    null, null
-//                    wifiNetwork.getLocation().getLatitude().toString(),
-//                    wifiNetwork.getLocation().getLongitude().toString()
+                    wifiNetwork.getLocation().getLatitude().toString(),
+                    wifiNetwork.getLocation().getLongitude().toString()
 );
         }
     }
@@ -334,9 +336,8 @@ public class ScanActivity extends ListActivity {
         dialog.show();
     }
 
-    public WifiNetworkList getNetworks(){
-        WifiNetworkList networks = new WifiNetworkList();
-        List<WifiNetwork> networkList = new ArrayList<WifiNetwork>();
+    public List<WifiNetwork> getNetworks(){
+        List<WifiNetwork> networkList = new ArrayList<>();
         String urlString = "https://wifinder-294dd.firebaseio.com/Networks.json";
         AsyncTask<String, Void, String> getRequest = new GetClient().execute(urlString);
         try {
@@ -353,10 +354,9 @@ public class ScanActivity extends ListActivity {
                             obj.getString("SSID"),
                             obj.getString("Password"),
                             coordinate);
-                    Log.d("Network", network.getSsid());
+                    Log.d("Network: ", network.getSsid());
                     networkList.add(network);
                 }
-                networks.setNetworks(networkList);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -365,7 +365,7 @@ public class ScanActivity extends ListActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return networks;
+        return networkList;
     }
 
     private void initializeGPSLocator() {
