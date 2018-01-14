@@ -10,13 +10,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -50,6 +54,7 @@ public class MainActivity extends ListActivity {
 
         list = getListView();
         mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wifiReciever = new WifiScanReceiver();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -58,13 +63,14 @@ public class MainActivity extends ListActivity {
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                Log.v("FUCK", "Didnt have permission, asking user for it.");
 
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
 
             } else {
-
+                Log.v("FUCK", "Didnt have permission, NOT asking user for it.");
                 // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(this,
@@ -76,7 +82,7 @@ public class MainActivity extends ListActivity {
                 // result of the request.
             }
         } else {
-            wifiReciever = new WifiScanReceiver();
+            Log.v("FUCK", "Already had permission");
             mainWifiObj.startScan();
         }
 
@@ -99,6 +105,15 @@ public class MainActivity extends ListActivity {
         mainWifiObj.startScan();*/
 
         // listening to single list item on click
+
+        Button getSSIDBTN = (Button) findViewById(R.id.getSSIDs);
+        getSSIDBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainWifiObj.startScan();
+            }
+        });
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -110,7 +125,6 @@ public class MainActivity extends ListActivity {
             }
         });
     }
-
 
     protected void onPause() {
         unregisterReceiver(wifiReciever);
@@ -161,39 +175,62 @@ public class MainActivity extends ListActivity {
     class WifiScanReceiver extends BroadcastReceiver {
         @SuppressLint("UseValueOf")
         public void onReceive(Context c, Intent intent) {
-            Toast.makeText(MainActivity.this, "got wifi scanner receiver ", Toast.LENGTH_SHORT).show();
-            List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
-            Log.v("FUCK", "size: " + wifiScanList.size());
+            getSSIDs(c);
+    }
 
-            wifis = new String[wifiScanList.size()];
-            for (int i = 0; i < wifiScanList.size(); i++) {
-                Log.v("FUCK", "ssid: " + wifiScanList.get(i).SSID);
-                wifis[i] = ((wifiScanList.get(i)).toString());
-            }
-            String filtered[] = new String[wifiScanList.size()];
-            int counter = 0;
-            for (String eachWifi : wifis) {
-                String[] temp = eachWifi.split(",");
 
-                filtered[counter] = temp[0].substring(5).trim();//+"\n" + temp[2].substring(12).trim()+"\n" +temp[3].substring(6).trim();//0->SSID, 2->Key Management 3-> Strength
 
-                counter++;
+    public void getSSIDs(Context c){
+        Toast.makeText(MainActivity.this, "got wifi scanner receiver ", Toast.LENGTH_SHORT).show();
+        List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
+        Log.v("FUCK", "size: " + wifiScanList.size());
 
-            }
-            Set<String> set = new HashSet<String>();
-            for (int i = 0; i < wifiScanList.size(); i++) {
-                set.add(filtered[i]);
-            }
-            Iterator it = set.iterator();
-            ArrayList<String> reFiltered = new ArrayList<String>();
-            while (it.hasNext()) {
-                String ssid = it.next().toString();
-                if (!ssid.isEmpty()) {
-                    reFiltered.add(ssid);
-                }
-            }
-            list.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, R.id.label, reFiltered));
+        wifis = new String[wifiScanList.size()];
+        for (int i = 0; i < wifiScanList.size(); i++) {
+            Log.v("FUCK", "ssid: " + wifiScanList.get(i).SSID);
+            wifis[i] = ((wifiScanList.get(i)).toString());
         }
+        String filtered[] = new String[wifiScanList.size()];
+        int counter = 0;
+        for (String eachWifi : wifis) {
+            String[] temp = eachWifi.split(",");
+
+            filtered[counter] = temp[0].substring(5).trim();//+"\n" + temp[2].substring(12).trim()+"\n" +temp[3].substring(6).trim();//0->SSID, 2->Key Management 3-> Strength
+
+            counter++;
+
+        }
+
+        Set<String> set = new HashSet<String>();
+        for (int i = 0; i < wifiScanList.size(); i++) {
+            set.add(filtered[i]);
+        }
+        Iterator it = set.iterator();
+        ArrayList<String> reFiltered = new ArrayList<String>();
+        while (it.hasNext()) {
+            String ssid = it.next().toString();
+            if (!ssid.isEmpty()) {
+                reFiltered.add(ssid);
+            }
+        }
+        final TextView currentSSIDTextView = (TextView) findViewById(R.id.currentSSID);
+        currentSSIDTextView.setText("Current SSID: "+getCurrentSsid(c));
+        list.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, R.id.label, reFiltered));
+    }
+    }
+
+    public static String getCurrentSsid(Context context) {
+        String ssid = null;
+        ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (networkInfo.isConnected()) {
+            final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            final WifiInfo connectionInfo = wifiManager.getConnectionInfo();
+            if (connectionInfo != null && !TextUtils.isEmpty(connectionInfo.getSSID())) {
+                ssid = connectionInfo.getSSID();
+            }
+        }
+        return ssid;
     }
 
     private void finallyConnect(String networkPass, String networkSSID) {
