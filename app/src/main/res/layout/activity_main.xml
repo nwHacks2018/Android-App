@@ -8,22 +8,24 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_width="368dp"
+        android:layout_height="495dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
 
         <TextView
+            android:id="@+id/currentSSIDMain"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:id="@+id/currentSSIDMain"
-            android:textSize="69dp"
-            />
+            android:textSize="30sp" />
 
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/buttonColor"
             android:text="Manually connect to a network"
             android:id="@+id/launcher1Btn"
             />
@@ -32,6 +34,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/buttonColor"
             android:text="Scan local public networks"
             android:id="@+id/launcher2Btn"
             />
@@ -39,16 +42,18 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/buttonColor"
             android:text="Retrieve from server"
             android:id="@+id/launcher3Btn"
             />
+
         <Button
+            android:id="@+id/launcher4Btn"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="See saved networks"
-            android:id="@+id/launcher4Btn"
-            />
+            android:backgroundTint="@color/buttonColor"
+            android:text="See saved networks" />
 
 
     </LinearLayout>
