@@ -37,6 +37,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.nwhacks.connieho.sampleapplication.R;
 import com.nwhacks.connieho.sampleapplication.application.WiFindApplication;
 import com.nwhacks.connieho.sampleapplication.backend.GetClient;
@@ -321,6 +323,9 @@ public class ScanActivity extends ListActivity {
 
         Button dialogButton = (Button) dialog.findViewById(R.id.okButton);
         pass = (EditText) dialog.findViewById(R.id.textPassword);
+
+        String password = getPassword(wifiSSID);
+        pass.setText(password);
         textSSID.setText(wifiSSID);
 
         // if button is clicked, connect to the network;
@@ -333,5 +338,20 @@ public class ScanActivity extends ListActivity {
             }
         });
         dialog.show();
+    }
+
+    private String getPassword(String wifiSSID){
+
+        List<WifiNetwork> allSavedNetworks = ((WiFindApplication) getApplication())
+                .getGlobalServices()
+                .getNetworkRepository().getAllSavedNetworks();
+
+        for (int i = 0; i < allSavedNetworks.size(); i++) {
+            Log.d("ssid", allSavedNetworks.get(i).getSsid() + " COMPARE TO " + wifiSSID);
+            if (allSavedNetworks.get(i).getSsid().equals(wifiSSID)) {
+                return allSavedNetworks.get(i).getPassword();
+            }
+        }
+        return "";
     }
 }
