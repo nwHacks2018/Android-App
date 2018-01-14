@@ -121,7 +121,7 @@ public class ScanActivity extends ListActivity {
 /*        wifiReciever = new WifiScanReceiver();
         mainWifiObj.startScan();*/
 
-        // listening to single list item on click
+        // listening to single listView item on click
 
         Button getSSIDBTN = (Button) findViewById(R.id.getSSIDs);
         getSSIDBTN.setOnClickListener(new View.OnClickListener() {

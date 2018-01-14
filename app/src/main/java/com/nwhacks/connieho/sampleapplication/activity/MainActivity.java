@@ -22,18 +22,28 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button launcher1Btn = (Button) findViewById(R.id.launcher1Btn);
-
+        Button launcher1Btn = findViewById(R.id.launcher1Btn);
         launcher1Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(MainActivity.this,
                         ScanActivity.class);
-                startActivity(myIntent);            }
+                startActivity(myIntent);
+            }
+        });
+
+        Button launcher3Btn = findViewById(R.id.launcher3Btn);
+        launcher3Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(MainActivity.this,
+                        RetrieveActivity.class);
+                startActivity(myIntent);
+            }
         });
 
         final TextView currentSSIDTextView = (TextView) findViewById(R.id.currentSSIDMain);
-        currentSSIDTextView.setText("Current SSID: "+getCurrentSsid(this));
+        currentSSIDTextView.setText("Current SSID: " + getCurrentSsid(this));
     }
 
     public static String getCurrentSsid(Context context) {
