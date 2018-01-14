@@ -61,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(
                                 allSavedNetworks.get(i).getLocation().getLatitude(),
-                                allSavedNetworks.get(i).getLocation().getLatitude()))
+                                allSavedNetworks.get(i).getLocation().getLongitude()))
                         .title(allSavedNetworks.get(i).getSsid()));
             }
         }
