@@ -42,6 +42,8 @@
             android:name=".service.GPSLocator"
             android:enabled="true"
             android:exported="true" />
+        <service android:name=".service.Autoconnector" />
+
 
         <activity android:name=".activity.MainActivity">
             <intent-filter>
