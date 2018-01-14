@@ -49,6 +49,7 @@ public class Autoconnector extends Service {
     @Override
     public void onCreate() {
 
+        mainWifiObj = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE));
         wifiReciever = new WifiScanReceiver();
 
         new Thread(new Runnable() {
