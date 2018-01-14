@@ -50,6 +50,13 @@
             android:id="@+id/launcher4Btn"
             />
 
+        <Button
+            android:id="@+id/launcher5Btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="View Networks Map" />
+
 
     </LinearLayout>
 
