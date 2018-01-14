@@ -71,7 +71,6 @@ public class MainActivity extends Activity {
             }
         });
 
-
         initializeGPSLocator();
 
         final TextView currentSSIDTextView = (TextView) findViewById(R.id.currentSSIDMain);
