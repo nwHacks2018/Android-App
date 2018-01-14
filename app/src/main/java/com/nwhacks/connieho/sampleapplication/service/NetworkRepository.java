@@ -26,6 +26,7 @@ public class NetworkRepository {
         List<WifiNetwork> networks = new ArrayList<>();
         networks.addAll(savedLocalPrivateNetworks);
         networks.addAll(savedPublicNetworks);
+        return networks;
     }
 
     public void addLocalPrivateNetworks(List<WifiNetwork> newNetworks) {
@@ -40,7 +41,7 @@ public class NetworkRepository {
     }
 
     // All duplicate SSIDs are removed from the first list before combining
-    private void combineWifiNetworkLists(List<WifiNetwork list1, List<WifiNetwork> list2) {
+    private void combineWifiNetworkLists(List<WifiNetwork> list1, List<WifiNetwork> list2) {
 
         for(WifiNetwork i : list2) {
             for(WifiNetwork j : list1) {
