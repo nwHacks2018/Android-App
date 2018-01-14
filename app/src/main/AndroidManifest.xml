@@ -46,13 +46,17 @@
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".activity.ScanActivity" />
         <activity android:name=".activity.RetrieveActivity" />
-
+        <activity android:name=".activity.SavedNetworksActivity" />
+        <activity android:name=".activity.SearchPublicNetworksActivity" />
+        <activity
+            android:name=".activity.MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>

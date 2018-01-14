@@ -66,6 +66,13 @@
             android:backgroundTint="@android:color/white"
             android:text="See saved networks" />
 
+        <Button
+            android:id="@+id/launcher5Btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="View Networks Map" />
+
 
     </LinearLayout>
 

@@ -11,7 +11,7 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginTop="8dp"
-    android:src="@drawable/wifi">
+    android:src="@drawable/wifi_blue">
 </ImageView>
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,8 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dip"
-        android:text="hi"
-        android:textColor="@android:color/black"
+        android:textColor="#2700a7"
         android:textSize="16dip"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/item_icon"
