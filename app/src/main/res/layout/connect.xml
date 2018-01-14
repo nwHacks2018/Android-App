@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
+    android:padding="20dp"
     tools:context="com.nwhacks.connieho.sampleapplication.activity.ScanActivity">
 
     <TextView
@@ -16,6 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/textSSID1"
+        android:backgroundTint="@color/actionStatusBarColor"
+        android:shadowColor="@color/actionStatusBarColor"
         android:layout_marginTop="5dp"
         android:inputType="textPassword"/>
 
