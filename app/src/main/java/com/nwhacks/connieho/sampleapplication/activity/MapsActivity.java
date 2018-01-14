@@ -57,13 +57,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
 
         for (int i = 0; i < allSavedNetworks.size(); i++) {
-            mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(
-                        allSavedNetworks.get(i).getLocation().getLatitude(),
-                        allSavedNetworks.get(i).getLocation().getLatitude()))
-                    .title(allSavedNetworks.get(i).getSsid()));
+            if (allSavedNetworks.get(i).getLocation().getLatitude() != null && allSavedNetworks.get(i).getLocation().getLatitude() != null) {
+                mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(
+                                allSavedNetworks.get(i).getLocation().getLatitude(),
+                                allSavedNetworks.get(i).getLocation().getLatitude()))
+                        .title(allSavedNetworks.get(i).getSsid()));
+            }
         }
-
-
     }
 }
