@@ -2,6 +2,8 @@ package com.nwhacks.connieho.sampleapplication.activity;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -10,10 +12,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nwhacks.connieho.sampleapplication.R;
+import com.nwhacks.connieho.sampleapplication.datatype.Coordinate;
+import com.nwhacks.connieho.sampleapplication.service.GPSLocator;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    private static final String TAG = "MAP_ACTIVITY";
     private GoogleMap mMap;
+    private GPSLocator gpsLocator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +29,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        Log.d(TAG, "Creating GPS locator");
+        gpsLocator = new GPSLocator();
+        try {
+            queryLocation();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void queryLocation() throws InterruptedException {
+        for (int i = 0; i < 500; i++){
+            Coordinate location = gpsLocator.GetCurrentLocation();
+            if (location != null) {
+                Toast.makeText(this, gpsLocator.GetCurrentLocation().toString(), Toast.LENGTH_LONG).show();
+                Thread.sleep((long)3000);
+            }
+        }
     }
 
 
