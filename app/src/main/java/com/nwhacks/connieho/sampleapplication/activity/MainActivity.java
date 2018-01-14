@@ -42,6 +42,16 @@ public class MainActivity extends Activity {
             }
         });
 
+        Button launcher4Btn = findViewById(R.id.launcher4Btn);
+        launcher4Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(MainActivity.this,
+                        SavedNetworksActivity.class);
+                startActivity(myIntent);
+            }
+        });
+
         final TextView currentSSIDTextView = (TextView) findViewById(R.id.currentSSIDMain);
         currentSSIDTextView.setText("Current SSID: " + getCurrentSsid(this));
     }
