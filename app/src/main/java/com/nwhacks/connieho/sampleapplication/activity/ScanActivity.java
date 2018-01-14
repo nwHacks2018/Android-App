@@ -36,11 +36,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nwhacks.connieho.sampleapplication.R;
+import com.nwhacks.connieho.sampleapplication.application.WiFindApplication;
 import com.nwhacks.connieho.sampleapplication.backend.GetClient;
 import com.nwhacks.connieho.sampleapplication.backend.PostClient;
 import com.nwhacks.connieho.sampleapplication.backend.WifiNetworkList;
 import com.nwhacks.connieho.sampleapplication.datatype.Coordinate;
 import com.nwhacks.connieho.sampleapplication.datatype.WifiNetwork;
+import com.nwhacks.connieho.sampleapplication.service.GPSLocator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,17 +63,19 @@ public class ScanActivity extends ListActivity {
 
     EditText pass;
 
+    private static final String TAG = "MAP_ACTIVITY";
+    public GPSLocator gpsLocator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_scan);
 
         list = getListView();
-        mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        mainWifiObj = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE));
         wifiReciever = new WifiScanReceiver();
 
-        getNetworks();
+        initializeGPSLocator();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -121,9 +125,9 @@ public class ScanActivity extends ListActivity {
 /*        wifiReciever = new WifiScanReceiver();
         mainWifiObj.startScan();*/
 
-        // listening to single list item on click
+        // listening to single listView item on click
 
-       Button getSSIDBTN = (Button) findViewById(R.id.getSSIDs);
+        Button getSSIDBTN = (Button) findViewById(R.id.getSSIDs);
         getSSIDBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -230,14 +234,11 @@ public class ScanActivity extends ListActivity {
             String ssid = it.next().toString();
             if (!ssid.isEmpty()) {
                 reFiltered.add(ssid);
-                Coordinate coordinate = new Coordinate();
-                coordinate.setLatitude(50.0);
-                coordinate.setLongitude(120.0);
-                WifiNetwork network = new WifiNetwork(
-                        ssid,
-                        "",
-                        coordinate);
-                networkList.add(network);
+                    WifiNetwork network = new WifiNetwork(
+                            ssid,
+                            "",
+                            ((WiFindApplication) getApplication()).getGlobalVars().getCoordinate());
+                    networkList.add(network);
             }
         }
 
@@ -259,8 +260,20 @@ public class ScanActivity extends ListActivity {
                     wifiNetwork.getSsid(),
                     wifiNetwork.getPassword(),
                     wifiNetwork.getLocation().getLatitude().toString(),
-                    wifiNetwork.getLocation().getLongitude().toString());
+                    wifiNetwork.getLocation().getLongitude().toString()
+);
         }
+    }
+
+    public void addNetwork(WifiNetwork wifiNetwork) {
+        String urlString = "https://wifinder-294dd.firebaseio.com/Networks";
+        new PostClient().execute(
+                urlString,
+                wifiNetwork.getSsid(),
+                wifiNetwork.getPassword(),
+                ((WiFindApplication) getApplication()).getGlobalVars().getCoordinate().getLatitude().toString(),
+                ((WiFindApplication) getApplication()).getGlobalVars().getCoordinate().getLongitude().toString());
+
     }
 
     public static String getCurrentSsid(Context context) {
@@ -292,6 +305,12 @@ public class ScanActivity extends ListActivity {
         conf.SSID = "\"\"" + networkSSID + "\"\"";
         conf.preSharedKey = "\"" + networkPass + "\"";
         mainWifiObj.addNetwork(conf);
+
+        WifiNetwork wifi = new WifiNetwork();
+        wifi.setSsid(networkSSID);
+        wifi.setPassword(networkPass);
+        wifi.setLocation(((WiFindApplication) getApplication()).getGlobalVars().getCoordinate());
+        addNetwork(wifi);
     }
 
     private void connectToWifi(final String wifiSSID) {
@@ -316,39 +335,23 @@ public class ScanActivity extends ListActivity {
         dialog.show();
     }
 
-    public WifiNetworkList getNetworks(){
-        WifiNetworkList networks = new WifiNetworkList();
-        List<WifiNetwork> networkList = new ArrayList<WifiNetwork>();
-        String urlString = "https://wifinder-294dd.firebaseio.com/Networks.json";
-        AsyncTask<String, Void, String> getRequest = new GetClient().execute(urlString);
-        try {
-            String result = getRequest.get();
-            try {
-                JSONObject object = new JSONObject(result);
-                Iterator<String> iterator = object.keys();
-                while (iterator.hasNext()) {
-                    JSONObject obj = object.getJSONObject(iterator.next());
-                    Coordinate coordinate = new Coordinate();
-                    coordinate.setLatitude(Double.parseDouble(obj.getJSONObject("Coordinate").getString("Latitude")));
-                    coordinate.setLongitude(Double.parseDouble(obj.getJSONObject("Coordinate").getString("Longitude")));
-                    WifiNetwork network = new WifiNetwork(
-                            obj.getString("SSID"),
-                            obj.getString("Password"),
-                            coordinate);
-                    Log.d("Network", network.getSsid());
-                    networkList.add(network);
-                }
-                networks.setNetworks(networkList);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return networks;
+    private void initializeGPSLocator() {
+        Log.d(TAG, "Creating GPS locator");
+        gpsLocator = new GPSLocator();
+        checkLocationPermissions();
+        Intent serviceIntent = new Intent(this, GPSLocator.class);
+        startService(serviceIntent);
     }
 
-
+    private void checkLocationPermissions() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] {
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION },
+                    10);
+        }
+    }
 }
