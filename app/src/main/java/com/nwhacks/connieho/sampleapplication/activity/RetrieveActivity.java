@@ -29,27 +29,41 @@ public class RetrieveActivity extends ListActivity {
 
         listView = getListView();
 
-        List<WifiNetwork> list = BackendClient.getRemotelySavedNetworks();
+        new Thread(new Runnable() {
+            public void run() {
+                List<WifiNetwork> list = BackendClient.getRemotelySavedNetworks();
 
-        ((WiFindApplication) getApplication())
-                .getGlobalServices()
-                .getNetworkRepository()
-                .addPublicNetworks(list);
+                ((WiFindApplication) getApplication())
+                        .getGlobalServices()
+                        .getNetworkRepository()
+                        .addPublicNetworks(list);
 
-        wifis = new String[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            Log.v(TAG, "Retrieving SSID from server: " + list.get(i).getSsid());
-            wifis[i] = list.get(i).getSsid();
-        }
+                wifis = new String[list.size()];
+                for (int i = 0; i < list.size(); i++) {
+                    Log.v(TAG, "Retrieving SSID from server: " + list.get(i).getSsid());
+                    wifis[i] = list.get(i).getSsid();
+                }
 
-        listView.setAdapter(new ArrayAdapter<>(
-                getApplicationContext(),
-                R.layout.list_item,
-                R.id.label,
-                wifis
-        ));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        listView.setAdapter(new ArrayAdapter<>(
+                                getApplicationContext(),
+                                R.layout.list_item,
+                                R.id.label,
+                                wifis
+                        ));
 
-        Toast.makeText(this, "Networks saved.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(
+                                getApplicationContext(),
+                                "Networks saved.",
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                });
+
+            }
+        }).start();
     }
 
     protected void onPause() {
