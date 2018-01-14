@@ -34,6 +34,8 @@ import java.util.Set;
 
 public class Autoconnector extends Service {
 
+    private static String TAG = AutoRetriever.class.getSimpleName();
+
     WifiManager mainWifiObj;
 
     WifiScanReceiver wifiReciever;
@@ -52,12 +54,14 @@ public class Autoconnector extends Service {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
-                if (getCurrentSsid(getApplicationContext()) == null) {
+                Log.d(TAG, "Automatically checking if wifi is connected.");
+                if (getCurrentSsid(getApplicationContext()) == null ||
+                        getCurrentSsid(getApplicationContext()).isEmpty()) {
                     attemptAutoConnection();
                 }
             }
@@ -89,6 +93,7 @@ public class Autoconnector extends Service {
         }
 
         if(ssid != null) {
+            Log.d(TAG, "Attempting to connect to network " + ssid);
             finallyConnect(pass, ssid);
             Toast.makeText(getApplicationContext(), "Connecting to wifi SSID: " + ssid, Toast.LENGTH_SHORT).show();
         }

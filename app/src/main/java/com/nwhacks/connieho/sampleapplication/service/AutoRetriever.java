@@ -30,6 +30,8 @@ import java.util.Set;
 
 public class AutoRetriever extends Service {
 
+    private static String TAG = AutoRetriever.class.getSimpleName();
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -47,6 +49,7 @@ public class AutoRetriever extends Service {
                     e.printStackTrace();
                 }
 
+                Log.d(TAG, "Automatically retrieving networks from server.");
                 List<WifiNetwork> list = BackendClient.getRemotelySavedNetworks();
 
                 ((WiFindApplication) getApplication())
