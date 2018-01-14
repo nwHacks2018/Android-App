@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/network_name_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="43dp"
-        android:layout_marginStart="43dp"
-        android:layout_marginTop="149dp"
         android:text="NameOfNetwork"
         android:textSize="18sp"
         android:layout_alignParentTop="true"
@@ -32,30 +31,28 @@
         android:text="Password:"
         android:layout_below="@+id/network_name_text_view"
         android:layout_alignLeft="@+id/network_name_text_view"
-        android:layout_alignStart="@+id/network_name_text_view" />
+        android:layout_alignStart="@+id/network_name_text_view"
+        android:layout_marginTop="11dp" />
 
     <Button
         android:id="@+id/cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="22dp"
         android:text="Cancel"
         android:layout_below="@+id/password_edit_text"
-        android:layout_toLeftOf="@+id/connect_button"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="16dp" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:id="@+id/connect_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Connect"
-        android:layout_marginRight="52dp"
-        android:layout_marginEnd="52dp"
         android:layout_alignBaseline="@+id/cancel_button"
         android:layout_alignBottom="@+id/cancel_button"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignRight="@+id/password_edit_text"
+        android:layout_alignEnd="@+id/password_edit_text" />
 
     <CheckBox
         android:id="@+id/show_password_check_box"
@@ -64,7 +61,7 @@
         android:layout_above="@+id/connect_button"
         android:layout_alignLeft="@+id/password_edit_text"
         android:layout_alignStart="@+id/password_edit_text"
-        android:checked="false"
-        android:text="Show password" />
+        android:checked="true"
+        android:text=" Show password" />
 
 </RelativeLayout>
