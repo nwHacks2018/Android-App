@@ -11,6 +11,8 @@ tools:context="com.nwhacks.connieho.sampleapplication.activity.RetrieveActivity"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:paddingLeft="5dp"
+        android:paddingTop="2dp"
         android:text="Saved network data from server:"
         android:id="@+id/loading_message"
         />

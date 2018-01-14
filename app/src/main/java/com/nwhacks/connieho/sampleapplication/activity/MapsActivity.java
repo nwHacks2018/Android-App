@@ -8,7 +8,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nwhacks.connieho.sampleapplication.R;
 import com.nwhacks.connieho.sampleapplication.application.WiFindApplication;
@@ -45,16 +47,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        LatLng myLocation = new LatLng(
-                ((WiFindApplication) getApplication()).getGlobalVars().getCoordinate().getLatitude(),
-                ((WiFindApplication) getApplication()).getGlobalVars().getCoordinate().getLongitude());
-        mMap.addMarker(new MarkerOptions().position(myLocation).title("Me"));
-
         List<WifiNetwork> allSavedNetworks = ((WiFindApplication) getApplication())
                 .getGlobalServices()
                 .getNetworkRepository().getAllSavedNetworks();
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
 
         for (int i = 0; i < allSavedNetworks.size(); i++) {
             if (allSavedNetworks.get(i).getLocation().getLatitude() != null && allSavedNetworks.get(i).getLocation().getLatitude() != null) {
@@ -65,5 +60,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .title(allSavedNetworks.get(i).getSsid()));
             }
         }
+
+        LatLng myLocation = new LatLng(
+                ((WiFindApplication) getApplication()).getGlobalVars().getCoordinate().getLatitude(),
+                ((WiFindApplication) getApplication()).getGlobalVars().getCoordinate().getLongitude());
+        Marker marker = mMap.addMarker(new MarkerOptions()
+                .position(myLocation)
+                .title("Me")
+                .icon(BitmapDescriptorFactory.defaultMarker(263)));
+        marker.showInfoWindow();
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 17));
     }
 }
