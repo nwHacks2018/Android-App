@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,17 +21,17 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.nwhacks.connieho.sampleapplication.datatype.Coordinate;
 
+import static android.content.Context.LOCATION_SERVICE;
+
 /**
  * Created by Owner on 1/13/2018.
  */
 
-public class GPSLocator extends Service{
+public class GPSLocator extends Service implements LocationListener{
 
     private static final String TAG = "GPS_LOCATOR";
-    private LocationListener mLocationListener;
     LocationManager locationManager;
     private Coordinate currentCoordinates;
-
 
     public GPSLocator() {
     }
@@ -40,7 +41,6 @@ public class GPSLocator extends Service{
         super.onCreate();
         currentCoordinates = new Coordinate();
         locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
-        mLocationListener = createNewLocationListener();
         registerForUpdates();
     }
 
@@ -48,8 +48,8 @@ public class GPSLocator extends Service{
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.e(TAG, "Location permissions not granted");
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
     }
 
     @Nullable
@@ -62,28 +62,31 @@ public class GPSLocator extends Service{
         return currentCoordinates;
     }
 
-    private LocationListener createNewLocationListener(){
-        return  new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                updateLocation(location);
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            @Override
-            public void onProviderEnabled(String provider) {}
-
-            @Override
-            public void onProviderDisabled(String provider) {}
-        };
-    }
-
     private void updateLocation(Location location){
-        Log.d(TAG, "Location changed: " + location.toString());
+        Log.d(TAG, "Updating coordinates: " + location.toString());
         currentCoordinates = new Coordinate();
         currentCoordinates.setLatitude(location.getLatitude());
         currentCoordinates.setLongitude(location.getLongitude());
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.d(TAG, "Location changed");
+        updateLocation(location);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 }
