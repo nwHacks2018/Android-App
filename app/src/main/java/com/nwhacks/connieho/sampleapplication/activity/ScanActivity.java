@@ -32,6 +32,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -133,7 +134,7 @@ public class ScanActivity extends ListActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 // selected item
-                String ssid = ((TextView) view).getText().toString();
+                String ssid = ((TextView) view.findViewById(R.id.label)).getText().toString();
                 connectToWifi(ssid);
                 Toast.makeText(ScanActivity.this, "Wifi SSID : " + ssid, Toast.LENGTH_SHORT).show();
 
