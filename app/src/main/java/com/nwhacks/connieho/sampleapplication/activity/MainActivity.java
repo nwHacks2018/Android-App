@@ -41,6 +41,16 @@ public class MainActivity extends Activity {
             }
         });
 
+        Button launcher2Btn = findViewById(R.id.launcher2Btn);
+        launcher2Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(MainActivity.this,
+                        SearchPublicNetworksActivity.class);
+                startActivity(myIntent);
+            }
+        });
+
         Button launcher3Btn = findViewById(R.id.launcher3Btn);
         launcher3Btn.setOnClickListener(new View.OnClickListener() {
             @Override
