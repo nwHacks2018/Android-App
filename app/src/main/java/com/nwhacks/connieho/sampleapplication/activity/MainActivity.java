@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -19,8 +20,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.nwhacks.connieho.sampleapplication.R;
-import com.nwhacks.connieho.sampleapplication.service.AutoRetriever;
-import com.nwhacks.connieho.sampleapplication.service.Autoconnector;
 import com.nwhacks.connieho.sampleapplication.service.GPSLocator;
 
 public class MainActivity extends Activity {
@@ -90,8 +89,38 @@ public class MainActivity extends Activity {
 
         initializeGPSLocator();
 
+    }
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
         final TextView currentSSIDTextView = (TextView) findViewById(R.id.currentSSIDMain);
-        currentSSIDTextView.setText("Current SSID: " + getCurrentSsid(this));
+        String currentSSID = getCurrentSsid(this);
+
+      // Drawable drawable = this.getResources().getDrawable(R.drawable.rounded_corner);
+
+
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setShape(GradientDrawable.RECTANGLE);
+        drawable.setCornerRadius(15);
+
+        if (currentSSID == null){
+            drawable.setStroke(3, getResources().getColor(R.color.disconnectedTextColor));
+            drawable.setColor(getResources().getColor(R.color.disconnectedBackgroundColor));
+            currentSSIDTextView.setTextColor(getResources().getColor(R.color.disconnectedTextColor));
+            currentSSIDTextView.setText("Not currently connected to a network");
+
+        } else {
+            drawable.setStroke(3, getResources().getColor(R.color.connectedTextColor));
+            drawable.setColor(getResources().getColor(R.color.connectedBackgroundColor));
+            currentSSIDTextView.setTextColor(getResources().getColor(R.color.connectedTextColor));
+
+            currentSSIDTextView.setText("Currently connected to: " + currentSSID);
+        }
+        currentSSIDTextView.setBackgroundDrawable(drawable);
+
     }
 
     public static String getCurrentSsid(Context context) {

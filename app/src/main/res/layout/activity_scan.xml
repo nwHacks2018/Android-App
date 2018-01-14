@@ -6,13 +6,17 @@ android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/backgroundColor"
 tools:context="com.nwhacks.connieho.sampleapplication.activity.ScanActivity">
-
-    <TextView
+`    <TextView
+        android:id="@+id/currentSSID"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/currentSSID"
-        />
+        android:background="@drawable/rounded_corner"
+        android:fontFeatureSettings="smcp"
+        android:gravity="center"
+        android:padding="20dp"
+        android:textColor="@color/connectedTextColor"
+        android:textSize="10sp" />
 
     <Button
         android:layout_width="fill_parent"

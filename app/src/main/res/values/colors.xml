@@ -8,4 +8,6 @@
     <color name="backgroundColor">#f9f9f9</color>
     <color name="connectedBackgroundColor">#e9fcd6</color>
     <color name="connectedTextColor">#67cc02</color>
+    <color name="disconnectedBackgroundColor">#FBD5E3 </color>
+    <color name="disconnectedTextColor">#C60247 </color>
 </resources>
