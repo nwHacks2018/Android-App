@@ -4,34 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     tools:context="com.nwhacks.connieho.sampleapplication.activity.MainActivity">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_width="368dp"
+        android:layout_height="495dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="8dp"
+        android:padding="20dp"
+        tools:layout_editor_absoluteX="8dp">
 
         <TextView
+            android:id="@+id/currentSSIDMain"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:id="@+id/currentSSIDMain"
-            android:textSize="69dp"
-            />
+            android:background="@drawable/rounded_corner"
+            android:fontFeatureSettings="smcp"
+            android:gravity="center"
+            android:padding="20dp"
+            android:textColor="@color/connectedTextColor"
+            android:textSize="10sp" />
 
         <Button
+            android:id="@+id/launcher1Btn"
+            android:paddingTop="10dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="Manually connect to a network"
-            android:id="@+id/launcher1Btn"
-            />
+            tools:backgroundTintMode="screen"
+            android:backgroundTint="@android:color/white" />
 
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            tools:backgroundTintMode="screen"
+            android:backgroundTint="@android:color/white"
             android:text="Scan local public networks"
             android:id="@+id/launcher2Btn"
             />
@@ -39,16 +51,20 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            tools:backgroundTintMode="screen"
+            android:backgroundTint="@android:color/white"
             android:text="Retrieve from server"
             android:id="@+id/launcher3Btn"
             />
+
         <Button
+            android:id="@+id/launcher4Btn"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="See saved networks"
-            android:id="@+id/launcher4Btn"
-            />
+            tools:backgroundTintMode="screen"
+            android:backgroundTint="@android:color/white"
+            android:text="See saved networks" />
 
         <Button
             android:id="@+id/launcher5Btn"
