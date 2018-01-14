@@ -61,7 +61,7 @@
         android:layout_above="@+id/connect_button"
         android:layout_alignLeft="@+id/password_edit_text"
         android:layout_alignStart="@+id/password_edit_text"
-        android:checked="true"
+        android:checked="false"
         android:text=" Show password" />
 
 </RelativeLayout>

@@ -143,12 +143,6 @@ public class ScanActivity extends ListActivity {
         });
     }
 
-    public void showAuthenticationDialog(View view){
-        android.app.FragmentManager fragmentManager = getFragmentManager();
-        AuthenticationFragment dialog = new AuthenticationFragment();
-        dialog.show(fragmentManager, "Authentication dialog");
-    }
-
     protected void onPause() {
         unregisterReceiver(wifiReciever);
         super.onPause();

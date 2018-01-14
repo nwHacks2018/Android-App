@@ -20,6 +20,8 @@ import android.widget.TextView;
 
 import com.nwhacks.connieho.sampleapplication.R;
 
+import org.w3c.dom.Text;
+
 import java.util.zip.Inflater;
 
 /**
@@ -29,6 +31,10 @@ import java.util.zip.Inflater;
 public class AuthenticationFragment extends DialogFragment {
 
     private String password;
+    private String networkName;
+
+    public AuthenticationFragment(){
+    }
 
     @Nullable
     @Override
@@ -37,6 +43,9 @@ public class AuthenticationFragment extends DialogFragment {
         Button connectButton = (Button) view.findViewById(R.id.connect_button);
         Button cancelButton = (Button) view.findViewById(R.id.cancel_button);
         final CheckBox checkBox = (CheckBox) view.findViewById(R.id.show_password_check_box);
+        TextView networkNameTextView = (TextView) view.findViewById(R.id.network_name_text_view);
+        networkName = getArguments().getString("networkName");
+        networkNameTextView.setText(networkName);
         setCancelable(true);
 
         connectButton.setOnClickListener(new View.OnClickListener() {
@@ -82,4 +91,17 @@ public class AuthenticationFragment extends DialogFragment {
     private void cancel(){
         dismiss();
     }
+
+    /* code to call to open dialog
+
+    public void showAuthenticationDialog(View view){
+        android.app.FragmentManager fragmentManager = getFragmentManager();
+        Bundle args = new Bundle();
+        AuthenticationFragment dialog = new AuthenticationFragment();
+        args.putString("networkName", "enterNetworkNameHere");
+        dialog.setArguments(args);
+        dialog.show(fragmentManager, "Authentication dialog");
+    }
+
+     */
 }
