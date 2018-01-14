@@ -37,17 +37,19 @@ import com.nwhacks.connieho.sampleapplication.backend.PostClient;
 import com.nwhacks.connieho.sampleapplication.backend.WifiNetworkList;
 import com.nwhacks.connieho.sampleapplication.datatype.Coordinate;
 import com.nwhacks.connieho.sampleapplication.datatype.WifiNetwork;
+import com.nwhacks.connieho.sampleapplication.service.GPSLocator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+
+import com.google.android.gms.maps.GoogleMap;
 
 public class ScanActivity extends ListActivity {
     WifiManager mainWifiObj;
@@ -56,6 +58,10 @@ public class ScanActivity extends ListActivity {
     String wifis[];
 
     EditText pass;
+
+    private static final String TAG = "MAP_ACTIVITY";
+    private GoogleMap mMap;
+    private GPSLocator gpsLocator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +73,8 @@ public class ScanActivity extends ListActivity {
         wifiReciever = new WifiScanReceiver();
 
         getNetworks();
+
+        initializeGPSLocator();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -225,9 +233,12 @@ public class ScanActivity extends ListActivity {
             String ssid = it.next().toString();
             if (!ssid.isEmpty()) {
                 reFiltered.add(ssid);
-                Coordinate coordinate = new Coordinate();
-                coordinate.setLatitude(50.0);
-                coordinate.setLongitude(120.0);
+                Coordinate coordinate = null;
+                try {
+                    coordinate = queryLocation();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 WifiNetwork network = new WifiNetwork(
                         ssid,
                         "",
@@ -345,5 +356,32 @@ public class ScanActivity extends ListActivity {
         return networks;
     }
 
+    private void initializeGPSLocator() {
+        Log.d(TAG, "Creating GPS locator");
+        gpsLocator = new GPSLocator();
+        checkLocationPermissions();
+        Intent serviceIntent = new Intent(this, GPSLocator.class);
+        startService(serviceIntent);
+    }
+
+    private void checkLocationPermissions() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] {
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION },
+                    10);
+        }
+    }
+
+    private Coordinate queryLocation() throws InterruptedException {
+        Coordinate location = gpsLocator.GetCurrentLocation();
+        if (location != null) {
+            Toast.makeText(this, gpsLocator.GetCurrentLocation().toString(), Toast.LENGTH_LONG).show();
+        }
+        return location;
+    }
 
 }
