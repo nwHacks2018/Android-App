@@ -264,6 +264,17 @@ public class ScanActivity extends ListActivity {
         }
     }
 
+    public void addNetwork(WifiNetwork wifiNetwork) {
+        String urlString = "https://wifinder-294dd.firebaseio.com/Networks";
+        new PostClient().execute(
+                urlString,
+                wifiNetwork.getSsid(),
+                wifiNetwork.getPassword(),
+                ((WiFindApplication) getApplication()).getGlobalVars().getCoordinate().getLatitude().toString(),
+                ((WiFindApplication) getApplication()).getGlobalVars().getCoordinate().getLongitude().toString());
+
+    }
+
     public static String getCurrentSsid(Context context) {
         String ssid = null;
         ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -293,6 +304,12 @@ public class ScanActivity extends ListActivity {
         conf.SSID = "\"\"" + networkSSID + "\"\"";
         conf.preSharedKey = "\"" + networkPass + "\"";
         mainWifiObj.addNetwork(conf);
+
+        WifiNetwork wifi = new WifiNetwork();
+        wifi.setSsid(networkSSID);
+        wifi.setPassword(networkPass);
+        wifi.setLocation(((WiFindApplication) getApplication()).getGlobalVars().getCoordinate());
+        addNetwork(wifi);
     }
 
     private void connectToWifi(final String wifiSSID) {
