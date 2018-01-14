@@ -244,7 +244,7 @@ public class ScanActivity extends ListActivity {
 
         final TextView currentSSIDTextView = (TextView) findViewById(R.id.currentSSID);
         currentSSIDTextView.setText("Current SSID: "+getCurrentSsid(c));
-        list.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, R.id.label, reFiltered));
+        list.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.active_list_item, R.id.label, reFiltered));
 
         WifiNetworkList wifiNetworkList = new WifiNetworkList(networkList);
         addNetworks(wifiNetworkList);
