@@ -32,22 +32,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nwhacks.connieho.sampleapplication.R;
+import com.nwhacks.connieho.sampleapplication.application.WiFindApplication;
 import com.nwhacks.connieho.sampleapplication.backend.GetClient;
 import com.nwhacks.connieho.sampleapplication.backend.PostClient;
 import com.nwhacks.connieho.sampleapplication.backend.WifiNetworkList;
 import com.nwhacks.connieho.sampleapplication.datatype.Coordinate;
 import com.nwhacks.connieho.sampleapplication.datatype.WifiNetwork;
+import com.nwhacks.connieho.sampleapplication.service.GPSLocator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+
 
 public class ScanActivity extends ListActivity {
     WifiManager mainWifiObj;
@@ -56,6 +58,9 @@ public class ScanActivity extends ListActivity {
     String wifis[];
 
     EditText pass;
+
+    private static final String TAG = "MAP_ACTIVITY";
+    public GPSLocator gpsLocator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +71,7 @@ public class ScanActivity extends ListActivity {
         mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         wifiReciever = new WifiScanReceiver();
 
-        getNetworks();
+        initializeGPSLocator();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -125,6 +130,8 @@ public class ScanActivity extends ListActivity {
                 mainWifiObj.startScan();
             }
         });
+
+        getNetworks();
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -225,14 +232,11 @@ public class ScanActivity extends ListActivity {
             String ssid = it.next().toString();
             if (!ssid.isEmpty()) {
                 reFiltered.add(ssid);
-                Coordinate coordinate = new Coordinate();
-                coordinate.setLatitude(50.0);
-                coordinate.setLongitude(120.0);
-                WifiNetwork network = new WifiNetwork(
-                        ssid,
-                        "",
-                        coordinate);
-                networkList.add(network);
+                    WifiNetwork network = new WifiNetwork(
+                            ssid,
+                            "",
+                            ((WiFindApplication) getApplication()).getGlobalVars().getCoordinate());
+                    networkList.add(network);
             }
         }
 
@@ -345,5 +349,23 @@ public class ScanActivity extends ListActivity {
         return networks;
     }
 
+    private void initializeGPSLocator() {
+        Log.d(TAG, "Creating GPS locator");
+        gpsLocator = new GPSLocator();
+        checkLocationPermissions();
+        Intent serviceIntent = new Intent(this, GPSLocator.class);
+        startService(serviceIntent);
+    }
 
+    private void checkLocationPermissions() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] {
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION },
+                    10);
+        }
+    }
 }
