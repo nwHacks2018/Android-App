@@ -38,11 +38,6 @@ public class RetrieveActivity extends ListActivity {
 
         listView = getListView();
 
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-
         List<WifiNetwork> list = getNetworks();
 
         ((WiFindApplication) getApplication())
@@ -63,7 +58,7 @@ public class RetrieveActivity extends ListActivity {
                 wifis
         ));
 
-        Toast.makeText(this, "Networks saved.", Toast.LENGTH_SHORT);
+        Toast.makeText(this, "Networks saved.", Toast.LENGTH_LONG).show();
     }
 
     protected void onPause() {
