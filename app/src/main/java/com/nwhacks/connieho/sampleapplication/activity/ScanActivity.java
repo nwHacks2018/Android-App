@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nwhacks.connieho.sampleapplication.R;
+import com.nwhacks.connieho.sampleapplication.application.WiFindApplication;
 import com.nwhacks.connieho.sampleapplication.backend.GetClient;
 import com.nwhacks.connieho.sampleapplication.backend.PostClient;
 import com.nwhacks.connieho.sampleapplication.backend.WifiNetworkList;
@@ -49,7 +50,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
-import com.google.android.gms.maps.GoogleMap;
 
 public class ScanActivity extends ListActivity {
     WifiManager mainWifiObj;
@@ -60,8 +60,7 @@ public class ScanActivity extends ListActivity {
     EditText pass;
 
     private static final String TAG = "MAP_ACTIVITY";
-    private GoogleMap mMap;
-    private GPSLocator gpsLocator;
+    public GPSLocator gpsLocator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +70,6 @@ public class ScanActivity extends ListActivity {
         list = getListView();
         mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         wifiReciever = new WifiScanReceiver();
-
-        getNetworks();
 
         initializeGPSLocator();
 
@@ -133,6 +130,8 @@ public class ScanActivity extends ListActivity {
                 mainWifiObj.startScan();
             }
         });
+
+        getNetworks();
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -233,17 +232,11 @@ public class ScanActivity extends ListActivity {
             String ssid = it.next().toString();
             if (!ssid.isEmpty()) {
                 reFiltered.add(ssid);
-                Coordinate coordinate = null;
-                try {
-                    coordinate = queryLocation();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                WifiNetwork network = new WifiNetwork(
-                        ssid,
-                        "",
-                        coordinate);
-                networkList.add(network);
+                    WifiNetwork network = new WifiNetwork(
+                            ssid,
+                            "",
+                            ((WiFindApplication) getApplication()).getGlobalVars().getCoordinate());
+                    networkList.add(network);
             }
         }
 
@@ -375,13 +368,4 @@ public class ScanActivity extends ListActivity {
                     10);
         }
     }
-
-    private Coordinate queryLocation() throws InterruptedException {
-        Coordinate location = gpsLocator.GetCurrentLocation();
-        if (location != null) {
-            Toast.makeText(this, gpsLocator.GetCurrentLocation().toString(), Toast.LENGTH_LONG).show();
-        }
-        return location;
-    }
-
 }
