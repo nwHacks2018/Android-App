@@ -207,7 +207,7 @@ public class SearchPublicNetworksActivity extends ListActivity {
                 }
             }
 
-            list.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, R.id.label, reFiltered));
+            list.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.active_list_item, R.id.label, reFiltered));
 
             WifiNetworkList wifiNetworkList = new WifiNetworkList(networkList);
             addNetworks(wifiNetworkList);
