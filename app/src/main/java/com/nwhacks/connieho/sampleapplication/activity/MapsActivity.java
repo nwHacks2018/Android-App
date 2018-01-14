@@ -43,11 +43,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         checkLocationPermissions();
         Intent serviceIntent = new Intent(this, GPSLocator.class);
         startService(serviceIntent);
-        try {
-            queryLocation();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private void checkLocationPermissions() {
@@ -62,14 +57,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void queryLocation() throws InterruptedException {
-        for (int i = 0; i < 500; i++){
-            Coordinate location = gpsLocator.GetCurrentLocation();
-            if (location != null) {
-                Toast.makeText(this, gpsLocator.GetCurrentLocation().toString(), Toast.LENGTH_LONG).show();
-                Thread.sleep((long)3000);
-            }
+    private Coordinate queryLocation() throws InterruptedException {
+        Coordinate location = gpsLocator.GetCurrentLocation();
+        if (location != null) {
+            Toast.makeText(this, gpsLocator.GetCurrentLocation().toString(), Toast.LENGTH_LONG).show();
         }
+        return location;
     }
 
 
