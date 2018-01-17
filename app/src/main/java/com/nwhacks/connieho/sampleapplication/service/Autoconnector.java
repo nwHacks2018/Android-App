@@ -81,22 +81,20 @@ public class Autoconnector extends Service {
         String ssid = null;
         String pass = null;
         for(String i : availableNetworkNames) {
+            if(getCurrentSsid(getApplicationContext()) != null) {
+                break;
+            }
             for(WifiNetwork j : savedNetworks) {
                 if(j.getSsid().equals(i) && j.getPassword() != null && !j.getPassword().isEmpty()) {
-                    ssid = i;
-                    pass = j.getPassword();
+                    Log.d(TAG, "Attempting to connect to network " + ssid);
+                    finallyConnect(pass, ssid);
                     break;
                 }
             }
-            if(ssid != null) {
-                break;
-            }
         }
 
-        if(ssid != null) {
-            Log.d(TAG, "Attempting to connect to network " + ssid);
-            finallyConnect(pass, ssid);
-            Toast.makeText(getApplicationContext(), "Connecting to wifi SSID: " + ssid, Toast.LENGTH_SHORT).show();
+        if(getCurrentSsid(getApplicationContext()) != null) {
+            Toast.makeText(getApplicationContext(), "Connected to wifi SSID: " + ssid, Toast.LENGTH_SHORT).show();
         }
     }
 
