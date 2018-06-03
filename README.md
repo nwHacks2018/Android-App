@@ -1,4 +1,4 @@
-# <img src="./img/logo.png" width="40"> WiFinder (nwHacks 2018): Android Application
+# <img src="./img/logo.png" width="40"> WiFind (nwHacks 2018): Android Application
 
 ## By Luminescence
 
