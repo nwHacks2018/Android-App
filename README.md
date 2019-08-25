@@ -13,6 +13,10 @@ The application mainly communicates with the Firebase database by asynchronously
 
 The base URL of the Firebase database is https://wifinder-294dd.firebaseio.com/.
 
+The application is structured internally as in the following diagram:
+
+[![App architecture diagram](readme-img/app-architecture.png)](https://drive.google.com/file/d/1PlWda-9x2nInU085GL3i_-j5ovSJSfQ5)
+
 The API to retrieve all data at root-level is as follows:
 
 ### Request
