@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nwhacks.connieho.sampleapplication">
+    package="com.nwhacks.luminescence.wifind">
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -18,7 +18,7 @@
     <uses-feature android:name="android.hardware.location.network" />
 
     <application
-        android:name=".application.WiFindApplication"
+        android:name="com.nwhacks.luminescence.wifind.application.WiFindApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -39,26 +39,26 @@
             android:value="@string/google_maps_key" />
 
         <service
-            android:name=".service.GPSLocator"
+            android:name="com.nwhacks.luminescence.wifind.service.GPSLocator"
             android:enabled="true"
             android:exported="true" />
-        <service android:name=".service.Autoconnector" />
-        <service android:name=".service.AutoRetriever" />
+        <service android:name="com.nwhacks.luminescence.wifind.service.Autoconnector" />
+        <service android:name="com.nwhacks.luminescence.wifind.service.AutoRetriever" />
 
 
-        <activity android:name=".activity.MainActivity">
+        <activity android:name="com.nwhacks.luminescence.wifind.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ScanActivity" />
-        <activity android:name=".activity.RetrieveActivity" />
-        <activity android:name=".activity.SavedNetworksActivity" />
-        <activity android:name=".activity.SearchPublicNetworksActivity" />
+        <activity android:name="com.nwhacks.luminescence.wifind.activity.ScanActivity" />
+        <activity android:name="com.nwhacks.luminescence.wifind.activity.RetrieveActivity" />
+        <activity android:name="com.nwhacks.luminescence.wifind.activity.SavedNetworksActivity" />
+        <activity android:name="com.nwhacks.luminescence.wifind.activity.SearchPublicNetworksActivity" />
         <activity
-            android:name=".activity.MapsActivity"
+            android:name="com.nwhacks.luminescence.wifind.activity.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
     </application>
 

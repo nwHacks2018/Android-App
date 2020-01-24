@@ -5,7 +5,7 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/backgroundColor"
-tools:context="com.nwhacks.connieho.sampleapplication.activity.RetrieveActivity">
+tools:context="com.nwhacks.luminescence.wifind.activity.RetrieveActivity">
 
     <TextView
         android:layout_width="fill_parent"
