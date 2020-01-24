@@ -2,4 +2,11 @@
     <string name="app_name">WiFind</string>
     <string name="title_activity_maps">WiFind</string>
     <string name="title_activity_main">WiFind</string>
+
+    <!-- Location Request Dialog Fragment -->
+    <string name="dialog_location_request_title">Location Required</string>
+    <string name="dialog_location_request_message">Location must be enabled for this application.</string>
+    <string name="go_to_settings">Go to Settings</string>
+    <string name="exit">Exit</string>
+
 </resources>

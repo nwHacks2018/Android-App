@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.nwhacks.luminescence.wifind.R;
+import com.nwhacks.luminescence.wifind.application.DeviceServices;
 import com.nwhacks.luminescence.wifind.service.GPSLocator;
 
 public class MainActivity extends Activity {
@@ -31,6 +32,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DeviceServices.requestPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        DeviceServices.requireLocationEnabled(this);
 
 //        Intent autoconnectorIntent = new Intent(this, Autoconnector.class);
 //        startService(autoconnectorIntent);
@@ -96,6 +100,8 @@ public class MainActivity extends Activity {
     public void onResume(){
         super.onResume();
 
+        DeviceServices.requireLocationEnabled(this);
+
         final TextView currentSSIDTextView = (TextView) findViewById(R.id.currentSSIDMain);
         String currentSSID = getCurrentSsid(this);
 
@@ -121,6 +127,16 @@ public class MainActivity extends Activity {
         }
         currentSSIDTextView.setBackgroundDrawable(drawable);
 
+    }
+
+    // Occurs only when user closes notification tray, in which they may have closed location
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus) {
+            DeviceServices.requireLocationEnabled(this);
+        }
     }
 
     public static String getCurrentSsid(Context context) {
