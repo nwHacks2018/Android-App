@@ -3,15 +3,18 @@
     <string name="title_activity_maps">WiFind</string>
     <string name="title_activity_main">WiFind</string>
 
+    <!-- Splash Activity -->
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="content_description_logo">Logo</string>
+
     <!-- Location Request Dialog Fragment -->
     <string name="dialog_location_request_title">Location Required</string>
     <string name="dialog_location_request_message">Location must be enabled for this application.</string>
     <string name="go_to_settings">Go to Settings</string>
     <string name="exit">Exit</string>
 
-    <string name="title_activity_splash">SplashActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="content_description_logo">Logo</string>
+    <!-- Location Exit Dialog Fragment -->
+    <string name="dialog_location_exit_title">Location Required</string>
+    <string name="dialog_location_exit_message">This application requires location permissions. Visit Settings and enable permissions for this application.</string>
 
 </resources>

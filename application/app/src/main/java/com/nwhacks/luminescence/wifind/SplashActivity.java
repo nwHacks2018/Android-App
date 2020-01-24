@@ -1,5 +1,7 @@
 package com.nwhacks.luminescence.wifind;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +11,8 @@ import android.view.WindowManager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.nwhacks.luminescence.wifind.activity.MainActivity;
+import com.nwhacks.luminescence.wifind.application.DeviceServices;
+import com.nwhacks.luminescence.wifind.application.Dialogs;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -33,13 +37,30 @@ public class SplashActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        waitUntilLocationEnabled(1000);
+
+    }
+
+    private void waitUntilLocationEnabled(long delayMillis) {
+        final Activity thisActivity = this;
+
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+
+            if (DeviceServices.deniedByUser(thisActivity, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Dialogs.exitWithoutLocationPermissions(thisActivity);
+            }
+            else if (DeviceServices.hasPermission(thisActivity, Manifest.permission.ACCESS_FINE_LOCATION)) {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
             }
-        }, DELAY);
+            else {
+                DeviceServices.requestPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+                DeviceServices.requireLocationEnabled(thisActivity);
+                waitUntilLocationEnabled(delayMillis);
+            }
+
+        }, delayMillis);
     }
 
 }

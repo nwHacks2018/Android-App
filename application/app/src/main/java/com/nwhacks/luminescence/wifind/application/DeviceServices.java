@@ -31,12 +31,23 @@ public class DeviceServices {
     /*
      * @param   permission  Value from Manifest.permission
      */
+    public static boolean hasPermission(Activity thisActivity, String permission) {
+        return ContextCompat.checkSelfPermission(thisActivity, permission)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static boolean deniedByUser(Activity thisActivity, String permission) {
+        return ActivityCompat.shouldShowRequestPermissionRationale(thisActivity, permission);
+    }
+
+    /*
+     * @param   permission  Value from Manifest.permission
+     */
     public static void requestPermission(
             Activity thisActivity,
             String permission) {
 
-        if (ContextCompat.checkSelfPermission(thisActivity, permission)
-                == PackageManager.PERMISSION_GRANTED) {
+        if (hasPermission(thisActivity, permission)) {
             // Permission already granted
             return;
         }
@@ -56,10 +67,6 @@ public class DeviceServices {
             );
         }
 
-    }
-
-    private static boolean deniedByUser(Activity thisActivity, String permission) {
-        return ActivityCompat.shouldShowRequestPermissionRationale(thisActivity, permission);
     }
 
     public static void requireLocationEnabled(Activity context) {
