@@ -1,7 +1,6 @@
 package com.nwhacks.connieho.sampleapplication.service;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,15 +12,11 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nwhacks.connieho.sampleapplication.R;
 import com.nwhacks.connieho.sampleapplication.application.WiFindApplication;
 import com.nwhacks.connieho.sampleapplication.datatype.Coordinate;
 import com.nwhacks.connieho.sampleapplication.datatype.WifiNetwork;

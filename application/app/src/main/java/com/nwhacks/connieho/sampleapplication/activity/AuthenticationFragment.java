@@ -1,14 +1,11 @@
 package com.nwhacks.connieho.sampleapplication.activity;
 
-import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDialogFragment;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDialogFragment;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nwhacks.connieho.sampleapplication.R;
-
-import org.w3c.dom.Text;
-
-import java.util.zip.Inflater;
 
 /**
  * Created by Owner on 1/13/2018.

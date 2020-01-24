@@ -1,8 +1,7 @@
 package com.nwhacks.connieho.sampleapplication.activity;
 
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -14,7 +13,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nwhacks.connieho.sampleapplication.R;
 import com.nwhacks.connieho.sampleapplication.application.WiFindApplication;
-import com.nwhacks.connieho.sampleapplication.backend.BackendClient;
 import com.nwhacks.connieho.sampleapplication.datatype.WifiNetwork;
 
 import java.util.List;
